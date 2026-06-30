@@ -1,0 +1,164 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Clothing Store Website - Lambda + API Gateway + DynamoDB
+
+Globals:
+  Function:
+    Runtime: nodejs22.x
+    Handler: index.handler
+    Environment:
+      Variables:
+        TABLE_NAME: !Ref ClothingStoreTable
+
+Resources:
+  ClothingStoreApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      Name: ClothingStoreApi
+      CorsConfiguration:
+        AllowMethods:
+          - GET
+          - POST
+          - DELETE
+          - OPTIONS
+        AllowHeaders:
+          - "*"
+        AllowOrigins:
+          - http://localhost:5173
+
+  ClothingStoreTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: clothing-store
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: PK
+          AttributeType: S
+        - AttributeName: SK
+          AttributeType: S
+      KeySchema:
+        - AttributeName: PK
+          KeyType: HASH
+        - AttributeName: SK
+          KeyType: RANGE
+
+  GetCart:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: GetCart
+      CodeUri: getCart/
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ClothingStoreTable
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            Path: /cart
+            Method: GET
+            ApiId: !Ref ClothingStoreApi
+
+  AddToCart:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: AddToCart
+      CodeUri: addToCart/
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ClothingStoreTable
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            Path: /cart
+            Method: POST
+            ApiId: !Ref ClothingStoreApi
+
+  DeleteFromCart:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: DeleteFromCart
+      CodeUri: deleteFromCart/
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ClothingStoreTable
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            Path: /cart
+            Method: DELETE
+            ApiId: !Ref ClothingStoreApi
+
+  GetAllProducts:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: GetAllProducts
+      CodeUri: getAllProducts/
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref ClothingStoreTable
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            Path: /products
+            Method: GET
+            ApiId: !Ref ClothingStoreApi
+
+  GetProduct:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: GetProduct
+      CodeUri: getProduct/
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref ClothingStoreTable
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            Path: /products/{productId}
+            Method: GET
+            ApiId: !Ref ClothingStoreApi
+
+  AddProduct:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: AddProduct
+      CodeUri: addProduct/
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ClothingStoreTable
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            Path: /products
+            Method: POST
+            ApiId: !Ref ClothingStoreApi
+
+  DeleteProduct:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: DeleteProduct
+      CodeUri: deleteProduct/
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ClothingStoreTable
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            Path: /products/{productId}
+            Method: DELETE
+            ApiId: !Ref ClothingStoreApi
+
+Outputs:
+  ApiUrl:
+    Description: HTTP API endpoint base URL
+    Value: !Sub "https://${ClothingStoreApi}.execute-api.${AWS::Region}.amazonaws.com"
+
+  TableName:
+    Description: DynamoDB table name
+    Value: !Ref ClothingStoreTable
