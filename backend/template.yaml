@@ -54,15 +54,15 @@ Resources:
         Api:
           Type: HttpApi
           Properties:
-            Path: /cart
+            Path: /getCart/{userId}
             Method: GET
             ApiId: !Ref ClothingStoreApi
 
-  AddToCart:
+  UpdateUserCart:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: AddToCart
-      CodeUri: addToCart/
+      FunctionName: UpdateUserCart
+      CodeUri: updateUserCart/
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref ClothingStoreTable
@@ -70,15 +70,15 @@ Resources:
         Api:
           Type: HttpApi
           Properties:
-            Path: /cart
+            Path: /updateUserCart/{userId}
             Method: POST
             ApiId: !Ref ClothingStoreApi
 
-  DeleteFromCart:
+  DeleteCartItem:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: DeleteFromCart
-      CodeUri: deleteFromCart/
+      FunctionName: DeleteCartItem
+      CodeUri: deleteCartItem/
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref ClothingStoreTable
@@ -86,7 +86,7 @@ Resources:
         Api:
           Type: HttpApi
           Properties:
-            Path: /cart
+            Path: /cartItem/{productId}/user/{userId}
             Method: DELETE
             ApiId: !Ref ClothingStoreApi
 
@@ -104,54 +104,6 @@ Resources:
           Properties:
             Path: /products
             Method: GET
-            ApiId: !Ref ClothingStoreApi
-
-  GetProduct:
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: GetProduct
-      CodeUri: getProduct/
-      Policies:
-        - DynamoDBReadPolicy:
-            TableName: !Ref ClothingStoreTable
-      Events:
-        Api:
-          Type: HttpApi
-          Properties:
-            Path: /products/{productId}
-            Method: GET
-            ApiId: !Ref ClothingStoreApi
-
-  AddProduct:
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: AddProduct
-      CodeUri: addProduct/
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref ClothingStoreTable
-      Events:
-        Api:
-          Type: HttpApi
-          Properties:
-            Path: /products
-            Method: POST
-            ApiId: !Ref ClothingStoreApi
-
-  DeleteProduct:
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: DeleteProduct
-      CodeUri: deleteProduct/
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref ClothingStoreTable
-      Events:
-        Api:
-          Type: HttpApi
-          Properties:
-            Path: /products/{productId}
-            Method: DELETE
             ApiId: !Ref ClothingStoreApi
 
 Outputs:
