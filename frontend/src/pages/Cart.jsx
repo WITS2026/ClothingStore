@@ -1,40 +1,64 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const initialItems = [
-  {
-    id: 1,
-    name: "Classic Hoodie",
-    price: 39.99,
-    quantity: 1,
-    color: "Sky Blue",
-  },
-  {
-    id: 2,
-    name: "Denim Jacket",
-    price: 59.99,
-    quantity: 1,
-    color: "Soft Indigo",
-  },
-  {
-    id: 3,
-    name: "Graphic Tee",
-    price: 24.99,
-    quantity: 2,
-    color: "Sunshine Yellow",
-  },
-];
+const USER_ID = "123";
 
 export default function Cart() {
-  const [cartItems, setCartItems] = useState(initialItems);
+  const [cartItems, setCartItems] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const removeItem = (id) => {
-    setCartItems((current) => current.filter((item) => item.id !== id));
+  useEffect(() => {
+    const getCart = async () => {
+      try {
+        const response = await fetch(
+          `https://jrpj1yvv3a.execute-api.us-east-1.amazonaws.com/getCart/${USER_ID}`
+        );
+
+        const data = await response.json();
+        setCartItems(data.items || []);
+      } catch (error) {
+        console.error("Error getting cart:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getCart();
+  }, []);
+
+  const removeItem = async (productId) => {
+    try {
+      const response = await fetch(
+        `https://jrpj1yvv3a.execute-api.us-east-1.amazonaws.com/cartItem/${productId}/user/${USER_ID}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to delete item");
+      }
+
+      setCartItems((current) =>
+        current.filter((item) => item.productId !== productId)
+      );
+    } catch (error) {
+      console.error("Error deleting item:", error);
+      alert("There was a problem removing this item.");
+    }
   };
 
   const total = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
+
+  if (loading) {
+    return (
+      <div className="container my-5">
+        <h3>Loading cart...</h3>
+      </div>
+    );
+  }
 
   return (
     <div className="container my-5">
@@ -46,6 +70,7 @@ export default function Cart() {
               Review your selected items, update quantities, or remove anything you don't want.
             </p>
           </div>
+
           <div className="text-end">
             <span className="badge rounded-pill bg-warning text-dark py-2 px-3">
               {cartItems.length} item{cartItems.length !== 1 ? "s" : ""}
@@ -66,7 +91,7 @@ export default function Cart() {
               <div className="list-group">
                 {cartItems.map((item) => (
                   <div
-                    key={item.id}
+                    key={item.productId}
                     className="list-group-item list-group-item-action d-flex flex-column flex-sm-row gap-3 align-items-start align-items-sm-center p-4 rounded-4 shadow-sm"
                   >
                     <div className="flex-grow-1">
@@ -81,7 +106,7 @@ export default function Cart() {
                       <button
                         type="button"
                         className="btn btn-sm btn-outline-danger"
-                        onClick={() => removeItem(item.id)}
+                        onClick={() => removeItem(item.productId)}
                       >
                         Remove
                       </button>
@@ -94,14 +119,17 @@ export default function Cart() {
             <div className="col-lg-4">
               <div className="card color-card h-100 shadow-sm p-4">
                 <h4 className="mb-3">Order summary</h4>
+
                 <div className="d-flex justify-content-between mb-3">
                   <span>Subtotal</span>
                   <strong>${total.toFixed(2)}</strong>
                 </div>
+
                 <div className="d-flex justify-content-between mb-4 text-muted">
                   <span>Shipping</span>
                   <span>Free</span>
                 </div>
+
                 <button className="btn btn-wave w-100 btn-lg">
                   Checkout
                 </button>
