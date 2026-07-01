@@ -10,7 +10,7 @@ export default function Cart() {
     const getCart = async () => {
       try {
         const response = await fetch(
-          `https://jrpj1yvv3a.execute-api.us-east-1.amazonaws.com/getCart/${USER_ID}`
+          `https://zw5njqds12.execute-api.us-east-1.amazonaws.com/getCart/${USER_ID}`
         );
 
         const data = await response.json();
@@ -28,7 +28,7 @@ export default function Cart() {
   const removeItem = async (productId) => {
     try {
       const response = await fetch(
-        `https://jrpj1yvv3a.execute-api.us-east-1.amazonaws.com/cartItem/${productId}/user/${USER_ID}`,
+        `https://zw5njqds12.execute-api.us-east-1.amazonaws.com/cartItem/${productId}/user/${USER_ID}`,
         {
           method: "DELETE",
         }
