@@ -7,7 +7,7 @@ export default function Shop() {
     const getProducts = async () => {
       try {
         const response = await fetch(
-          "https://jrpj1yvv3a.execute-api.us-east-1.amazonaws.com/products"
+          "https://zw5njqds12.execute-api.us-east-1.amazonaws.com/products"
         );
 
         const data = await response.json();
@@ -23,7 +23,7 @@ export default function Shop() {
   const addToCart = async (product) => {
     try {
       await fetch(
-        "https://jrpj1yvv3a.execute-api.us-east-1.amazonaws.com/updateUserCart/123",
+        "https://zw5njqds12.execute-api.us-east-1.amazonaws.com/updateUserCart/123",
         {
           method: "POST",
           headers: {
