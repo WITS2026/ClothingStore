@@ -75,7 +75,7 @@ Resources:
   GetCart:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: GetCart
+      FunctionName: ClothingStoreGetCart
       CodeUri: getCart/
       Policies:
         - DynamoDBCrudPolicy:
@@ -93,7 +93,7 @@ Resources:
   UpdateUserCart:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: UpdateUserCart
+      FunctionName: ClothingStoreUpdateUserCart
       CodeUri: updateUserCart/
       Policies:
         - DynamoDBCrudPolicy:
@@ -111,7 +111,7 @@ Resources:
   DeleteCartItem:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: DeleteCartItem
+      FunctionName: ClothingStoreDeleteCartItem
       CodeUri: deleteCartItem/
       Policies:
         - DynamoDBCrudPolicy:
@@ -129,7 +129,7 @@ Resources:
   GetAllProducts:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: GetAllProducts
+      FunctionName: ClothingStoreGetAllProducts
       CodeUri: getAllProducts/
       Policies:
         - DynamoDBReadPolicy:
