@@ -27,19 +27,7 @@ function App() {
               element={
                 <Authenticator>
                   {({ signOut, user }) => (
-                    <>
-                      <div className="container mb-3">
-                        <span>Hello, {user?.signInDetails?.loginId}</span>
-                        <button
-                          className="btn btn-outline-dark btn-sm ms-3"
-                          onClick={signOut}
-                        >
-                          Sign Out
-                        </button>
-                      </div>
-
-                      <Cart />
-                    </>
+                    <Cart />
                   )}
                 </Authenticator>
               }
