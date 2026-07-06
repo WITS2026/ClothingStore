@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { fetchAuthSession } from "aws-amplify/auth";
 
 export default function Shop() {
   const [products, setProducts] = useState([]);
@@ -22,12 +23,15 @@ export default function Shop() {
 
   const addToCart = async (product) => {
     try {
+      const session = await fetchAuthSession();
+      const token = session.tokens.idToken.toString();
       await fetch(
         "https://zw5njqds12.execute-api.us-east-1.amazonaws.com/updateUserCart/123",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": token
           },
           body: JSON.stringify({
             productId: product.productId,
