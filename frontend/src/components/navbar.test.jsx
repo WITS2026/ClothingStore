@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import { Authenticator } from "@aws-amplify/ui-react";
-import Navbar from "./Navbar";
+import Navbar from "./navbar";
 
 test("shows navbar links", () => {
   render(
