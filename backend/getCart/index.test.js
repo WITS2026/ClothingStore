@@ -16,10 +16,14 @@ test("returns an empty array if the cart has no items", async () => {
   dynamoMock.on(QueryCommand).resolves({});
 
   const event = {
-    pathParameters: {
-      userId: "123",
-    },
     requestContext: {
+      authorizer: {
+        jwt: {
+          claims: {
+            sub: "123",
+          },
+        },
+      },
       http: {
         method: "GET",
       },
@@ -54,12 +58,16 @@ test("returns 500 if DynamoDB fails", async () => {
   dynamoMock.on(QueryCommand).rejects(new Error("DynamoDB error"));
 
   const event = {
-    pathParameters: {
-      userId: "123",
-    },
     requestContext: {
       http: {
         method: "GET",
+      },
+      authorizer: {
+        jwt: {
+          claims: {
+            sub: "123",
+          },
+        },
       },
     },
   };
