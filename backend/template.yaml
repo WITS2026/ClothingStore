@@ -84,7 +84,7 @@ Resources:
         Api:
           Type: HttpApi
           Properties:
-            Path: /getCart/{userId}
+            Path: /getCart
             Method: GET
             ApiId: !Ref ClothingStoreApi
             Auth:
@@ -102,7 +102,7 @@ Resources:
         Api:
           Type: HttpApi
           Properties:
-            Path: /updateUserCart/{userId}
+            Path: /updateUserCart
             Method: POST
             ApiId: !Ref ClothingStoreApi
             Auth:
@@ -120,7 +120,7 @@ Resources:
         Api:
           Type: HttpApi
           Properties:
-            Path: /cartItem/{productId}/user/{userId}
+            Path: /cartItem/{productId}
             Method: DELETE
             ApiId: !Ref ClothingStoreApi
             Auth:

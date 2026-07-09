@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchAuthSession } from "aws-amplify/auth";
 
-const USER_ID = "123";
-
 export default function Cart() {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,7 +11,7 @@ export default function Cart() {
         const session = await fetchAuthSession();
         const token = session.tokens.idToken.toString();
         const response = await fetch(
-          `https://zw5njqds12.execute-api.us-east-1.amazonaws.com/getCart/${USER_ID}`, {
+          `https://zw5njqds12.execute-api.us-east-1.amazonaws.com/getCart`, {
           method: "GET",
           headers: {
             Authorization: token,
@@ -38,7 +36,7 @@ export default function Cart() {
       const session = await fetchAuthSession();
       const token = session.tokens.idToken.toString();
       const response = await fetch(
-        `https://zw5njqds12.execute-api.us-east-1.amazonaws.com/cartItem/${productId}/user/${USER_ID}`,
+        `https://zw5njqds12.execute-api.us-east-1.amazonaws.com/cartItem/${productId}`,
         {
           method: "DELETE",
           headers: {
