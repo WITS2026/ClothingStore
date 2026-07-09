@@ -21,7 +21,8 @@ const response = (statusCode, body) => ({
 });
 
 export const handler = async (event) => {
-  const userId = event.pathParameters?.userId;
+  const claims = event.requestContext?.authorizer?.jwt?.claims;
+  const userId = claims?.sub;
 
   if (event.requestContext?.http?.method === "OPTIONS") {
     return response(200, {});

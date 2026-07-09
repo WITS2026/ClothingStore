@@ -26,12 +26,12 @@ export default function Shop() {
       const session = await fetchAuthSession();
       const token = session.tokens.idToken.toString();
       await fetch(
-        "https://zw5njqds12.execute-api.us-east-1.amazonaws.com/updateUserCart/123",
+        "https://zw5njqds12.execute-api.us-east-1.amazonaws.com/updateUserCart",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": token
+            "Authorization": "Bearer " + token
           },
           body: JSON.stringify({
             productId: product.productId,

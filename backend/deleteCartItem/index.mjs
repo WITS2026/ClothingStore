@@ -22,11 +22,13 @@ const response = (statusCode, body) => ({
 
 export const handler = async (event) => {
   try {
-    const { userId, productId } = event.pathParameters || {};
+    const claims = event.requestContext?.authorizer?.jwt?.claims;
+    const userId = claims?.sub;
+    const { productId } = event.pathParameters || {};
 
-    if (!userId || !productId) {
+    if (!productId) {
       return response(400, {
-        message: "userId and productId are required in the path",
+        message: "productId is required in the path",
       });
     }
 
