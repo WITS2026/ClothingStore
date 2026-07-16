@@ -35,7 +35,6 @@ export const handler = async (event) => {
     const PK = `CART#USER#${userId}`;
     const SK = `PRODUCT#${productId}`;
 
-    console.log("Looking for item with PK:", PK, "and SK:", SK);
     // Check if item exists
     const existingItem = await docClient.send(
       new GetCommand({
